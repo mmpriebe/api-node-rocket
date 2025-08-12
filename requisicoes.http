@@ -1,0 +1,12 @@
+POST http://localhost:3333/courses
+
+{
+  "title": "Curso de Fastify"
+}
+
+###
+
+GET http://localhost:3333/courses
+
+### 
+GET http://localhost:3333/courses/2
