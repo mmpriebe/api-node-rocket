@@ -1,5 +1,9 @@
 import fastify from "fastify";
-import crypto from "node:crypto";
+import { courses } from "./src/database/schema.ts";
+import {validatorCompiler, serializerCompiler, type ZodTypeProvider} from 'fastify-type-provider-zod';
+import { eq } from "drizzle-orm";
+import { db } from "./src/database/client.ts";
+import { z} from 'zod';
 
 const server = fastify({
   logger: {
@@ -11,51 +15,55 @@ const server = fastify({
       },
     },
   },
+}).withTypeProvider<ZodTypeProvider>()
+
+server.setValidatorCompiler(validatorCompiler);
+server.setSerializerCompiler(serializerCompiler);
+
+
+server.get("/courses", async (request, replay) => {
+  const result = await db.select().from(courses);
+  return replay.send({ courses: result })
 });
 
-const courses = [
-  { id: "1", title: "Curso NodeJS" },
-  { id: "2", title: "Curso React" },
-  { id: "3", title: "Curso React Native" },
-];
-
-server.get("/courses", () => {
-  return { courses, page: 1 };
-});
-
-server.post("/courses", (request, replay) => {
-  type Body = {
-    title: string;
-  };
+server.post("/courses", {
+  schema: {
+    body: z.object({
+      title: z.string(),
+    })
+  }
+}, async (request, replay) => {
 
   const courseId = crypto.randomUUID();
 
-  const body = request.body as Body;
-
-  const courseTitle = body.title;
+  const courseTitle = request.body.title;
 
   if (!courseTitle) {
     return replay.status(400).send({ message: "Titulo obrigatorio" });
   }
 
-  courses.push({ id: courseId, title: courseTitle });
+  const result = await db.insert(courses).values({
+    title: courseTitle
+  })
 
-  replay.status(201).send({ courseId });
+  replay.status(201).send({ result });
 });
 
-server.get("/courses/:id", (request, replay) => {
+server.get("/courses/:id", async (request, replay) => {
   type Params = {
     id: string;
   };
 
   const params: Params = request.params as Params;
-
   const courseId = params.id;
 
-  const course = courses.find((course) => course.id === courseId);
+  const result = await db
+    .select()
+    .from(courses)
+    .where(eq(courses.id, courseId))
 
-  if (course) {
-    return { course };
+  if (courses) {
+    return { courses };
   }
 
   return replay.status(404).send();
