@@ -4,9 +4,11 @@ import {
   validatorCompiler, 
   serializerCompiler, 
   type ZodTypeProvider,  
-  jsonSchemaTransform} from 'fastify-type-provider-zod';
+  jsonSchemaTransform
+} from 'fastify-type-provider-zod';
 
 import scalarAPIReference from '@scalar/fastify-api-reference'
+
 import { getCoursesRoute } from './src/routes/get-courses.ts';
 import { createCourseRoute } from "./src/routes/create-course.ts";
 import { getCourseByIdRoute } from "./src/routes/get-course-by-id.ts";

@@ -21,12 +21,7 @@ export const getCoursesRoute: FastifyPluginAsyncZod = async (server) => {
       },
     },
     async (request, reply) => {
-      const result = await db.select({
-          id: courses.id,
-          title: courses.title,
-        })
-        .from(courses);
-
+      const result = await db.select({id: courses.id, title: courses.title,}).from(courses);
       return reply.send({ courses: result });
     }
   );
