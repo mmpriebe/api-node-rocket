@@ -4,11 +4,7 @@ POST http://localhost:3333/courses
 Content-Type: application/json
 
 {
-<<<<<<< HEAD
-  "title": "Curso de React"
-=======
   "title": "Curso de Java"
->>>>>>> b762fc0536286848a254a1d4c61e6a893409703a
 }
 
 ###
