@@ -1,9 +1,15 @@
 import fastify from "fastify";
-import { courses } from "./src/database/schema.ts";
-import {validatorCompiler, serializerCompiler, type ZodTypeProvider} from 'fastify-type-provider-zod';
-import { eq } from "drizzle-orm";
-import { db } from "./src/database/client.ts";
-import { z} from 'zod';
+import { fastifySwagger } from '@fastify/swagger'
+import {
+  validatorCompiler, 
+  serializerCompiler, 
+  type ZodTypeProvider,  
+  jsonSchemaTransform} from 'fastify-type-provider-zod';
+
+import scalarAPIReference from '@scalar/fastify-api-reference'
+import { getCoursesRoute } from './src/routes/get-courses.ts';
+import { createCourseRoute } from "./src/routes/create-course.ts";
+import { getCourseByIdRoute } from "./src/routes/get-course-by-id.ts";
 
 const server = fastify({
   logger: {
@@ -17,56 +23,27 @@ const server = fastify({
   },
 }).withTypeProvider<ZodTypeProvider>()
 
+if (process.env.NODE_ENV === 'development') {
+  server.register(fastifySwagger, {
+    openapi: {
+      info: {
+        title: 'Desafio Node.js',
+        version: '1.0.0',
+      }
+    },
+    transform: jsonSchemaTransform,
+  })
+  
+  server.register(scalarAPIReference, {
+    routePrefix: '/docs',
+  })
+}
+
 server.setValidatorCompiler(validatorCompiler);
 server.setSerializerCompiler(serializerCompiler);
 
-
-server.get("/courses", async (request, replay) => {
-  const result = await db.select().from(courses);
-  return replay.send({ courses: result })
-});
-
-server.post("/courses", {
-  schema: {
-    body: z.object({
-      title: z.string(),
-    })
-  }
-}, async (request, replay) => {
-
-  const courseId = crypto.randomUUID();
-
-  const courseTitle = request.body.title;
-
-  if (!courseTitle) {
-    return replay.status(400).send({ message: "Titulo obrigatorio" });
-  }
-
-  const result = await db.insert(courses).values({
-    title: courseTitle
-  })
-
-  replay.status(201).send({ result });
-});
-
-server.get("/courses/:id", async (request, replay) => {
-  type Params = {
-    id: string;
-  };
-
-  const params: Params = request.params as Params;
-  const courseId = params.id;
-
-  const result = await db
-    .select()
-    .from(courses)
-    .where(eq(courses.id, courseId))
-
-  if (courses) {
-    return { courses };
-  }
-
-  return replay.status(404).send();
-});
+server.register(getCoursesRoute);
+server.register(createCourseRoute);
+server.register(getCourseByIdRoute);
 
 server.listen({ port: 3333 });
