@@ -72,3 +72,4 @@ Observações
 - O servidor utiliza Fastify e validação via schemas (Zod) definidos em `src/routes/coursesSchema.ts`.
 - As migrations e o schema do banco estão na pasta `drizzle/`.
 
+

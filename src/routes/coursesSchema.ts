@@ -25,6 +25,9 @@ export const getCoursesSchema = {
       schema: {
         tags: ["courses"],
         summary: "Get all courses",
+        querystring: z.object({
+          search: z.string().optional(),
+        }),
         response: {
           200: z.object({
             courses: z.array(
