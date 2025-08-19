@@ -27,6 +27,8 @@ export const getCoursesSchema = {
         summary: "Get all courses",
         querystring: z.object({
           search: z.string().optional(),
+          orderBy: z.enum(['title', 'id']).optional().default('id'),
+          page: z.coerce.number().optional().default(1),
         }),
         response: {
           200: z.object({
@@ -34,8 +36,11 @@ export const getCoursesSchema = {
               z.object({
                 id: z.uuid(),
                 title: z.string()
-              })
+              }),
             ),
+            total_cursos: z.number().optional(),
+            page: z.number().optional(),
+            perPage: z.number().optional().default(2),
           }),
         },
       },
