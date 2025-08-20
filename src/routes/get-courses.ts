@@ -22,16 +22,16 @@ export const getCoursesRoute: FastifyPluginAsyncZod = async (server) => {
           {
             id: courses.id, 
             title: courses.title,
-            enrollments: count(enrollments.id)
+            // enrollments: count(enrollments.id)
           }
         )
           .from(courses)
-          .innerJoin(enrollments, eq(enrollments.courseId, courses.id))
+          // .innerJoin(enrollments, eq(enrollments.courseId, courses.id))
           .orderBy(asc(courses[orderBy]))
           .limit(10)
           .offset((page - 1) * 2)
-          .where(and(...conditions))
-          .groupBy(courses.id),
+          .where(and(...conditions)),
+          // .groupBy(courses.id),
          
         db.$count(courses, and(...conditions))
       ])

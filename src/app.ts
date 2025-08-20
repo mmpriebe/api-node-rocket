@@ -9,11 +9,11 @@ import {
 
 import scalarAPIReference from '@scalar/fastify-api-reference'
 
-import { getCoursesRoute } from './src/routes/get-courses.ts';
-import { createCourseRoute } from "./src/routes/create-course.ts";
-import { getCourseByIdRoute } from "./src/routes/get-course-by-id.ts";
+import { getCoursesRoute } from './routes/get-courses.ts';
+import { createCourseRoute } from "./routes/create-course.ts";
+import { getCourseByIdRoute } from "./routes/get-course-by-id.ts";
 
-const server = fastify({
+export const server = fastify({
   logger: {
     transport: {
       target: 'pino-pretty',
@@ -48,6 +48,4 @@ server.register(getCoursesRoute);
 server.register(createCourseRoute);
 server.register(getCourseByIdRoute);
 
-server.listen({ port: 3333 }).then(() => {
-  console.log('HTTP server running!')
-})
+

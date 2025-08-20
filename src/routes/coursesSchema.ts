@@ -36,7 +36,7 @@ export const getCoursesSchema = {
               z.object({
                 id: z.uuid(),
                 title: z.string(),
-                enrollments: z.number()
+                // enrollments: z.number()
               }),
             ),
             total_cursos: z.number().optional(),
