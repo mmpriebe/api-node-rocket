@@ -43,6 +43,34 @@
       "when": 1755723731247,
       "tag": "0005_tranquil_azazel",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1755781242331,
+      "tag": "0006_overjoyed_sentry",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1755781283447,
+      "tag": "0007_useful_vindicator",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1755781384207,
+      "tag": "0008_loose_slayback",
+      "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1755781720481,
+      "tag": "0009_calm_whirlwind",
+      "breakpoints": true
     }
   ]
 }

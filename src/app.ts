@@ -12,6 +12,7 @@ import scalarAPIReference from '@scalar/fastify-api-reference'
 import { getCoursesRoute } from './routes/get-courses.ts';
 import { createCourseRoute } from "./routes/create-course.ts";
 import { getCourseByIdRoute } from "./routes/get-course-by-id.ts";
+import { loginRoute } from "./routes/login.ts";
 
 
 if(process.env.NODE_ENV === 'development') {
@@ -58,5 +59,6 @@ server.setSerializerCompiler(serializerCompiler);
 server.register(getCoursesRoute);
 server.register(createCourseRoute);
 server.register(getCourseByIdRoute);
+server.register(loginRoute);
 
 
