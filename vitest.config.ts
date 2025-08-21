@@ -6,7 +6,7 @@
           provider: 'v8',
           reporter: ['text', 'html'],
           include: ['src/**/*.ts'],
-          exclude: ['src/types.ts', 'src/database/*.ts'],
+          exclude: ['src/types.ts', 'src/database/*.ts', 'src/server.ts'],
           enabled: true
         },
       },

@@ -13,17 +13,24 @@ import { getCoursesRoute } from './routes/get-courses.ts';
 import { createCourseRoute } from "./routes/create-course.ts";
 import { getCourseByIdRoute } from "./routes/get-course-by-id.ts";
 
-export const server = fastify({
-  logger: {
-    transport: {
-      target: 'pino-pretty',
-      options: {
-        translateTime: 'HH:MM:ss Z',
-        ignore: 'pid,hostname',
+
+if(process.env.NODE_ENV === 'development') {
+
+ const server = fastify({
+    logger: {
+      transport: {
+        target: 'pino-pretty',
+        options: {
+          translateTime: 'HH:MM:ss Z',
+          ignore: 'pid,hostname',
+        },
       },
     },
-  },
-}).withTypeProvider<ZodTypeProvider>()
+  }).withTypeProvider<ZodTypeProvider>()
+
+}
+
+export const server = fastify().withTypeProvider<ZodTypeProvider>()
 
 if (process.env.NODE_ENV === 'development') {
   server.register(fastifySwagger, {
@@ -40,6 +47,10 @@ if (process.env.NODE_ENV === 'development') {
     routePrefix: '/docs'
   })
 }
+
+server.get('/ping', async () => {
+  return { pong: 'it worked!' }
+})
 
 server.setValidatorCompiler(validatorCompiler);
 server.setSerializerCompiler(serializerCompiler);
